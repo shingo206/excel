@@ -7,6 +7,8 @@ from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from .form import LogForm
 from .models import Log
 
+import openpyxl as px
+
 
 def index(request):
     return render(request, 'beginning/index.html', context={'form': 'form'})
@@ -31,3 +33,6 @@ class LogUpdateView(UpdateView):
 class LogDeleteView(DeleteView):
     model = Log
     success_url = reverse_lazy('beginning:logs')
+
+
+

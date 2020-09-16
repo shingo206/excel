@@ -7,3 +7,6 @@ class LogForm(ModelForm):
     class Meta:
         model = Log
         fields = ['title']
+
+
+
