@@ -1,38 +1,39 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
-
-from .form import LogForm
-from .models import Log
-
 import openpyxl as px
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DeleteView, UpdateView
+
+from .form import SalesUpdateForm
+from .models import Sales
 
 
-def index(request):
-    return render(request, 'beginning/index.html', context={'form': 'form'})
+def create(request):
+    wb = px.load_workbook('beginning/templates/sales.xlsx')
+    ws = wb.active
+    for sale in ws:
+
+        if sale[0].row == 1:
+            pass
+        else:
+            if sale[0].value is None:
+                break
+            print(sale[0].value, ",", sale[1].value)
+            sale, created = Sales.objects.update_or_create(
+                month=sale[0].value,
+                defaults={'amount': sale[1].value}
+            )
+    return redirect('/beginning')
 
 
-class LogListView(ListView):
-    model = Log
+class SalesListView(ListView):
+    model = Sales
 
 
-class LogCreateView(CreateView):
-    model = Log
-    form_class = LogForm
-    success_url = reverse_lazy('beginning:logs')
+class SalesUpdateView(UpdateView):
+    model = Sales
+    form_class = SalesUpdateForm
 
 
-class LogUpdateView(UpdateView):
-    model = Log
-    form_class = LogForm
-    success_url = reverse_lazy('beginning:logs')
-
-
-class LogDeleteView(DeleteView):
-    model = Log
-    success_url = reverse_lazy('beginning:logs')
-
-
-
+class SalesDeleteView(DeleteView):
+    model = Sales
+    success_url = reverse_lazy('beginning:sales')

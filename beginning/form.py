@@ -1,12 +1,15 @@
 from django.forms import ModelForm
 
-from .models import Log
+from .models import Sales
 
 
-class LogForm(ModelForm):
+class SalesForm(ModelForm):
     class Meta:
-        model = Log
-        fields = ['title']
+        model = Sales
+        fields = ['month', 'amount']
 
 
-
+class SalesUpdateForm(ModelForm):
+    class Meta:
+        model = Sales
+        fields = ['amount']
